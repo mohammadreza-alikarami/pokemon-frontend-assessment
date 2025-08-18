@@ -22,7 +22,7 @@ A modern Pokédex application built with Next.js 14, TypeScript, and Tailwind CS
 1. **Clone the repository to your local machine:**
 
    ```sh
-   git clone https://github.com/ORIGINAL_OWNER/REPO_NAME.git
+   git clone https://github.com/Produce8/frontend-assessment.git
    ```
 
 2. **Create a new repository on your GitHub account** (do not fork, just create a blank repo)
@@ -30,9 +30,9 @@ A modern Pokédex application built with Next.js 14, TypeScript, and Tailwind CS
 3. **Set your new repository as the remote:**
 
    ```sh
-   cd REPO_NAME
+   cd frontend-assessment
    git remote remove origin
-   git remote add origin https://github.com/YOUR_USERNAME/NEW_REPO_NAME.git
+   git remote add origin https://github.com/YOUR_USERNAME/frontend-assessment.git
    ```
 
 4. **Push to your new repository:**
@@ -66,10 +66,6 @@ Once you have the repository set up and running locally, you can begin the assig
    - Create a feature branch for each ticket
    - Submit pull requests as if requesting review from team members
 4. Deploy your solution when complete
-
-## ❓ Questions and Support
-
-Please review the ticket documentation thoroughly before starting the assignment. If you have any questions or need clarification on the assignment, please reach out to the recruiter directly.
 
 ## 🙏 Acknowledgments
 
