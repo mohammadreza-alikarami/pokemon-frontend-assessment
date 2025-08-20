@@ -22,7 +22,7 @@ A modern Pokédex application built with Next.js 14, TypeScript, and Tailwind CS
 1. **Clone the repository to your local machine:**
 
    ```sh
-   git clone https://github.com/Produce8/frontend-assessment.git
+   git clone git@github.com:Produce8/frontend-assessment.git
    ```
 
 2. **Create a new repository on your GitHub account** (do not fork, just create a blank repo)
