@@ -7,6 +7,26 @@ const config: Config = {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  safelist: [
+    "bg-gray-400",
+    "bg-red-500",
+    "bg-blue-500",
+    "bg-green-500",
+    "bg-yellow-400",
+    "bg-cyan-400",
+    "bg-orange-700",
+    "bg-purple-600",
+    "bg-yellow-700",
+    "bg-indigo-400",
+    "bg-pink-500",
+    "bg-lime-500",
+    "bg-stone-500",
+    "bg-violet-700",
+    "bg-indigo-700",
+    "bg-gray-800",
+    "bg-slate-400",
+    "bg-pink-300",
+  ],
   theme: {
     extend: {
       backgroundImage: {
