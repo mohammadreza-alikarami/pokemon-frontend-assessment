@@ -8,7 +8,7 @@ import {
     formatId,
     formatWeight,
     getTypeColor,
-} from "@/lib/utils";
+} from "@/lib/pokemon-utils";
 import {ArrowLeft} from "lucide-react";
 import {Badge} from "@/components/ui/badge";
 import SubHeader from "@/components/ui/sub-header";

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { formatId } from "@/lib/utils";
+import { formatId } from "@/lib/pokemon-utils";
 
 interface SubHeaderProps {
     name: string;

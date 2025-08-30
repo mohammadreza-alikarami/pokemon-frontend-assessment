@@ -12,24 +12,28 @@ export function formatPokemonName(name: string): string {
 
 export function getTypeColor(type: string): string {
   const typeColors: Record<string, string> = {
-    normal: '#A8A878',
-    fire: '#F08030',
-    water: '#6890F0',
-    electric: '#F8D030',
-    grass: '#78C850',
-    ice: '#98D8D8',
-    fighting: '#C03028',
-    poison: '#A040A0',
-    ground: '#E0C068',
-    flying: '#A890F0',
-    psychic: '#F85888',
-    bug: '#A8B820',
-    rock: '#B8A038',
-    ghost: '#705898',
-    dragon: '#7038F8',
-    dark: '#705848',
-    steel: '#B8B8D0',
-    fairy: '#EE99AC',
+    normal: "bg-gray-400",
+    fire: "bg-red-500",
+    water: "bg-blue-500",
+    grass: "bg-green-500",
+    electric: "bg-yellow-400",
+    ice: "bg-cyan-400",
+    fighting: "bg-orange-700",
+    poison: "bg-purple-600",
+    ground: "bg-yellow-700",
+    flying: "bg-indigo-400",
+    psychic: "bg-pink-500",
+    bug: "bg-lime-500",
+    rock: "bg-stone-500",
+    ghost: "bg-violet-700",
+    dragon: "bg-indigo-700",
+    dark: "bg-gray-800",
+    steel: "bg-slate-400",
+    fairy: "bg-pink-300",
   };
   return typeColors[type] || '#68A090';
 }
+export const formatHeight = (d: number) => `${(d / 10).toFixed(1)} m`;
+export const formatWeight = (h: number) => `${(h / 10).toFixed(1)} kg`;
+export const formatId = (id: number) => `#${id?.toString().padStart(3, "0")}`;
+
