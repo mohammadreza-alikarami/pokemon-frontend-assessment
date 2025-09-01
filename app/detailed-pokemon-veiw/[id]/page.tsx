@@ -1,16 +1,14 @@
-import PokemonDetails from "@/components/pokenon-details";
+import PokemonDetails from "@/components/pokemon/pokenon-details";
+import { getPokemonDetails } from "@/lib/api";
 
 async function getPokemonData(id: string) {
-    const [pokemonRes, speciesRes] = await Promise.all([
-        fetch(`https://pokeapi.co/api/v2/pokemon/${id}`).then((res) => res.json()),
-        fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`).then((res) => res.json()),
+    const [pokemonRes] = await Promise.all([
+        getPokemonDetails(id),
     ]);
-    return { pokemon: pokemonRes, species: speciesRes };
+    return { pokemon: pokemonRes };
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
-    const { pokemon, species } = await getPokemonData(params.id);
-    console.log('pokemon: ', pokemon);
-    console.log('species: ', species);
-    return <PokemonDetails pokemon={pokemon} species={species} />;
+    const { pokemon } = await getPokemonData(params.id);
+    return <PokemonDetails pokemon={pokemon} />;
 }

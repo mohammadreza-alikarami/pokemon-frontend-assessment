@@ -1,21 +1,20 @@
 "use client";
 
-import {useMemo, useState} from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { calculateAbilityEffect } from "@/lib/abilityEffects"; // provided in your repo
+import { Activity, Info } from "lucide-react";
+import { useMemo, useState } from "react";
 import {
-    ResponsiveContainer,
-    BarChart,
     Bar,
+    BarChart,
     CartesianGrid,
+    Legend,
+    Tooltip as RechartsTooltip,
+    ResponsiveContainer,
     XAxis,
     YAxis,
-    Tooltip as RechartsTooltip,
-    Legend,
 } from "recharts";
-import {Badge} from "@/components/ui/badge";
-import {Button} from "@/components/ui/button";
-import {Card, CardContent} from "@/components/ui/card";
-import {Info, Activity} from "lucide-react";
-import {calculateAbilityEffect} from "@/lib/abilityEffects"; // provided in your repo
 
 type StatKey =
     | "hp"
@@ -43,7 +42,7 @@ interface StatsChartProps {
     abilities: AbilityMeta[];
 }
 
-export default function StatsChart({pokemon, abilities}: StatsChartProps) {
+export default function StatsChart({ pokemon, abilities }: StatsChartProps) {
     const [selected, setSelected] = useState<string>(
         abilities?.[0]?.name ?? pokemon?.abilities?.[0]?.ability?.name ?? ""
     );
@@ -62,7 +61,7 @@ export default function StatsChart({pokemon, abilities}: StatsChartProps) {
 
     const chartData = useMemo(() => {
         // Fall back to base if calculateAbilityEffect doesn’t handle something
-        return baseStats.map((s) => {
+        return baseStats.map((s: { key: StatKey; label: string; base: number; }) => {
             let modified = s.base;
             try {
                 const res = calculateAbilityEffect?.(selected, s.key, s.base);
@@ -84,11 +83,11 @@ export default function StatsChart({pokemon, abilities}: StatsChartProps) {
     }, [baseStats, selected]);
 
     const baseTotal = useMemo(
-        () => baseStats.reduce((sum, s) => sum + s.base, 0),
+        () => baseStats.reduce((sum: number, s: { key: StatKey; label: string; base: number; }) => sum + s.base, 0),
         [baseStats]
     );
     const modifiedTotal = useMemo(
-        () => chartData.reduce((sum, d) => sum + d.modified, 0),
+        () => chartData.reduce((sum: number, d: { label: string; base: number; modified: number; change: number; pct: number; }) => sum + d.modified, 0),
         [chartData]
     );
     const net = modifiedTotal - baseTotal;
@@ -97,12 +96,10 @@ export default function StatsChart({pokemon, abilities}: StatsChartProps) {
         abilities?.find((a) => a.name === selected) ?? abilities?.[0];
 
     return (
-        // <Card className="bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 border-0">
-        //     <CardContent>
         <>
             {/* Title */}
             <div className="flex items-center gap-2 mb-4">
-                <Activity className="h-5 w-5 text-gray-700"/>
+                <Activity className="h-5 w-5 text-gray-700" />
                 <h3 className="text-xl font-semibold text-gray-800">
                     Base Stats vs Ability Effects
                 </h3>
@@ -111,10 +108,10 @@ export default function StatsChart({pokemon, abilities}: StatsChartProps) {
             {/* Ability selector */}
             <div className="mb-2">
                 <div className="flex items-center gap-2 mb-2">
-                    <Info className="h-4 w-4 text-gray-600"/>
+                    <Info className="h-4 w-4 text-gray-600" />
                     <span className="text-sm font-medium text-gray-700">
-              Select Ability
-            </span>
+                        Select Ability
+                    </span>
                 </div>
                 <div className="flex flex-wrap gap-2">
                     {abilities?.map((a) => {
@@ -142,9 +139,9 @@ export default function StatsChart({pokemon, abilities}: StatsChartProps) {
             {/* Ability description */}
             {selectedMeta?.description && (
                 <div className="mt-3 bg-white p-3 text-sm text-gray-600">
-            <span className="font-medium text-gray-800 block mb-1">
-              {selectedMeta.name}
-            </span>
+                    <span className="font-medium text-gray-800 block mb-1">
+                        {selectedMeta.name}
+                    </span>
                     {selectedMeta.description}
                 </div>
             )}
@@ -154,27 +151,27 @@ export default function StatsChart({pokemon, abilities}: StatsChartProps) {
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                         data={chartData}
-                        margin={{top: 8, right: 0, left: 0, bottom: 8}}
+                        margin={{ top: 8, right: 0, left: 0, bottom: 8 }}
                         barCategoryGap="20%"
                     >
-                        <CartesianGrid stroke="#E5E7EB"/>
+                        <CartesianGrid stroke="#E5E7EB" />
                         <XAxis
                             dataKey="label"
-                            tick={{fill: "#6B7280", fontSize: 12}}
-                            axisLine={{stroke: "#E5E7EB"}}
-                            tickLine={{stroke: "#E5E7EB"}}
+                            tick={{ fill: "#6B7280", fontSize: 12 }}
+                            axisLine={{ stroke: "#E5E7EB" }}
+                            tickLine={{ stroke: "#E5E7EB" }}
                             angle={-45}            // rotate 45 degrees counterclockwise
                             textAnchor="end"       // align the text properly after rotation
                         />
                         <YAxis
-                            tick={{fill: "#6B7280", fontSize: 12}}
-                            axisLine={{stroke: "#E5E7EB"}}
-                            tickLine={{stroke: "#E5E7EB"}}
+                            tick={{ fill: "#6B7280", fontSize: 12 }}
+                            axisLine={{ stroke: "#E5E7EB" }}
+                            tickLine={{ stroke: "#E5E7EB" }}
                             domain={[0, (dataMax: number) => Math.max(150, dataMax + 20)]}
                         />
                         <Legend verticalAlign="bottom" height={70}
-                                wrapperStyle={{position: 'relative', bottom: '-100px !important'}}/>
-                        <RechartsTooltip content={<CustomTooltip ability={selectedMeta}/>}/>
+                            wrapperStyle={{ position: 'relative', bottom: '-100px !important' }} />
+                        <RechartsTooltip content={<CustomTooltip ability={selectedMeta} />} />
                         <Bar
                             name="Base Stat"
                             dataKey="base"
@@ -204,9 +201,8 @@ export default function StatsChart({pokemon, abilities}: StatsChartProps) {
                 <div className="rounded-xl px-4 py-3 bg-gray-50 text-gray-800">
                     <div className="text-sm">Net Change</div>
                     <div
-                        className={`text-2xl font-bold ${
-                            net >= 0 ? "text-green-600" : "text-red-600"
-                        }`}
+                        className={`text-2xl font-bold ${net >= 0 ? "text-green-600" : "text-red-600"
+                            }`}
                     >
                         {net >= 0 ? `+${net}` : net}
                     </div>
@@ -220,13 +216,11 @@ export default function StatsChart({pokemon, abilities}: StatsChartProps) {
                 effects, weather, or other factors not represented in this chart.
                 Hover over bars to see detailed stat information and ability effects.
             </p>
-            {/*</CardContent>*/}
-            {/*</Card>*/}
         </>
     );
 }
 
-function CustomTooltip({active, payload, label, ability}: any) {
+function CustomTooltip({ active, payload, label, ability }: any) {
     if (!active || !payload?.length) return null;
     const base = payload.find((p: any) => p.dataKey === "base")?.value ?? 0;
     const mod = payload.find((p: any) => p.dataKey === "modified")?.value ?? base;
@@ -248,20 +242,19 @@ function CustomTooltip({active, payload, label, ability}: any) {
                 <div className="flex items-center justify-between">
                     <span className="text-gray-600">Change:</span>
                     <span
-                        className={`font-medium ${
-                            change >= 0 ? "text-green-600" : "text-red-600"
-                        }`}
+                        className={`font-medium ${change >= 0 ? "text-green-600" : "text-red-600"
+                            }`}
                     >
-            {change >= 0 ? `+${change}` : change} ({pct >= 0 ? `+${pct}` : pct}
+                        {change >= 0 ? `+${change}` : change} ({pct >= 0 ? `+${pct}` : pct}
                         %)
-          </span>
+                    </span>
                 </div>
             </div>
             <div className="flex items-center gap-2 mb-2">
-                <Info className="h-4 w-4 text-gray-600 mt-2"/>
-            {ability?.description && (
-                <div className="mt-2 text-xs text-gray-600">{ability.description}</div>
-            )}
+                <Info className="h-4 w-4 text-gray-600 mt-2" />
+                {ability?.description && (
+                    <div className="mt-2 text-xs text-gray-600">{ability.description}</div>
+                )}
             </div>
         </div>
     );

@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { formatId } from "@/lib/pokemon-utils";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 interface SubHeaderProps {
     name: string;
@@ -11,7 +11,7 @@ interface SubHeaderProps {
 
 export default function SubHeader({ name, id }: SubHeaderProps) {
     return (
-        <div className="w-full flex items-center justify-center mx-auto md:ml-52 md:justify-start mb-6 sm:px-0 py-3 top-[3.5rem] bg-white/80 backdrop-blur-md border-b border-gray-200 z-40 gap-3">
+        <div className="w-full flex items-center justify-center mx-auto md:pl-52 md:pr-4 md:justify-start mb-6 sm:px-0 py-3 top-[3.5rem] bg-white/80 backdrop-blur-md border-b border-gray-200 z-40 gap-3">
             {/* Back button */}
             <Link
                 href="/"
@@ -25,14 +25,14 @@ export default function SubHeader({ name, id }: SubHeaderProps) {
             <h1 className="text-lg sm:text-xl font-bold flex items-center text-center">
                 <span className="text-yellow-500">⚡</span>
                 <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent text-3xl font-bold">
-          {name}
-        </span>
+                    {name}
+                </span>
             </h1>
 
             {/* Pokémon ID */}
             <span className="text-lg font-normal text-muted-foreground">
-        {formatId(id)}
-      </span>
+                {formatId(id)}
+            </span>
         </div>
     );
 }
