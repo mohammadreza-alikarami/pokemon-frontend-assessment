@@ -87,10 +87,16 @@ export default function PokemonDetails({
                         <Tabs defaultValue="details" className="mt-6">
                             <TabsList className="grid grid-cols-2 w-full">
                                 <TabsTrigger value="details" className="gap-2">
-                                    <Info className="h-4 w-4 text-gray-600"/>                                    Details
+                                    <Info className="h-4 w-4 text-gray-600"/> Details
                                 </TabsTrigger>
                                 <TabsTrigger value="chart" className="gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor">
+                                        <path d="M3 3v18h18"/>
+                                        <path d="M18 17V9"/>
+                                        <path d="M13 17V5"/>
+                                        <path d="M8 17v-3"/>
+                                    </svg>
                                     Stats Chart
                                 </TabsTrigger>
                             </TabsList>
@@ -157,7 +163,7 @@ export default function PokemonDetails({
 
                             {/* CHART TAB */}
                             <TabsContent value="chart" className="mt-4 p-4 sm:p-6">
-                                <StatsChart pokemon={pokemon} abilities={abilitiesForChart} />
+                                <StatsChart pokemon={pokemon} abilities={abilitiesForChart}/>
                             </TabsContent>
                         </Tabs>
                     </CardContent>
