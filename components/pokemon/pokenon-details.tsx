@@ -1,39 +1,57 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import {Card, CardContent} from "@/components/ui/card";
+import StatsChart from "@/components/pokemon/StatsChart";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import SubHeader from "@/components/ui/sub-header";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getAbilityDetails } from "@/lib/api";
 import {
     formatHeight,
-    formatId,
     formatWeight,
-    getTypeColor,
+    getTypeColor
 } from "@/lib/pokemon-utils";
-import {ArrowLeft, Info} from "lucide-react";
-import {Badge} from "@/components/ui/badge";
-import SubHeader from "@/components/ui/sub-header";
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import StatsChart from "@/components/pokemon/StatsChart";
+import { BarChart2, Info } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 interface PokemonDetailsProps {
     pokemon: any;
-    species: any;
 }
 
 export default function PokemonDetails({
-                                           pokemon,
-                                           species,
-                                       }: PokemonDetailsProps) {
+    pokemon,
+}: PokemonDetailsProps) {
+    const [abilityDetails, setAbilityDetails] = useState<Record<string, any>>({});
+
+    useEffect(() => {
+        const fetchAbilityData = async () => {
+            if (!pokemon?.abilities) return;
+            const detailsMap: Record<string, any> = {};
+            const abilityPromises = pokemon.abilities.map(async (a: any) => {
+                const abilityName = a.ability.name;
+                const data = await getAbilityDetails(abilityName);
+                if (data) {
+                    detailsMap[abilityName] = data;
+                }
+            });
+            await Promise.all(abilityPromises);
+            setAbilityDetails(detailsMap);
+        };
+        fetchAbilityData();
+    }, [pokemon?.abilities]);
+
     if (!pokemon) return null;
+
     const abilitiesForChart = pokemon?.abilities?.map((a: any) => ({
         name: a?.ability?.name,
         is_hidden: a?.is_hidden,
-        description: species?.abilities?.find((b: any) => b.name === a?.ability?.name)?.description,
+        description: abilityDetails[a.ability.name]?.effect_entries?.find((entry: any) => entry.language.name === 'en')?.effect || '',
     }));
 
     return (
         <>
-            <SubHeader name={pokemon.name} id={pokemon.id}/>
+            <SubHeader name={pokemon.name} id={pokemon.id} />
             <div className="max-w-2xl mx-auto">
 
                 {/* Main Card */}
@@ -80,24 +98,17 @@ export default function PokemonDetails({
                                         t.type.name
                                     )}`}
                                 >
-                {t.type.name}
-              </span>
+                                    {t.type.name}
+                                </span>
                             ))}
                         </div>
                         <Tabs defaultValue="details" className="mt-6">
                             <TabsList className="grid grid-cols-2 w-full">
                                 <TabsTrigger value="details" className="gap-2">
-                                    <Info className="h-4 w-4 text-gray-600"/> Details
+                                    <Info className="h-4 w-4 text-gray-600" /> Details
                                 </TabsTrigger>
                                 <TabsTrigger value="chart" className="gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24"
-                                         fill="none" stroke="currentColor">
-                                        <path d="M3 3v18h18"/>
-                                        <path d="M18 17V9"/>
-                                        <path d="M13 17V5"/>
-                                        <path d="M8 17v-3"/>
-                                    </svg>
-                                    Stats Chart
+                                    <BarChart2 className="h-4 w-4" /> Stats Chart
                                 </TabsTrigger>
                             </TabsList>
 
@@ -109,9 +120,7 @@ export default function PokemonDetails({
                                     <h2 className="text-lg font-bold">Abilities</h2>
                                     <ul className="space-y-2 mt-2">
                                         {pokemon?.abilities?.map((a: any, idx: number) => {
-                                            const ability = species.abilities?.find(
-                                                (ab: any) => ab.name === a.ability.name
-                                            );
+                                            const ability = abilityDetails[a.ability.name];
                                             return (
                                                 <li key={idx} className="flex items-center gap-2 text-sm">
                                                     {/* Main ability badge */}
@@ -130,8 +139,8 @@ export default function PokemonDetails({
                                                     )}
 
                                                     {/* Ability description */}
-                                                    {ability?.description && (
-                                                        <p className="mt-1 text-gray-600">{ability.description}</p>
+                                                    {ability?.effect_entries?.find((entry: any) => entry.language.name === 'en')?.effect && (
+                                                        <p className="mt-1 text-gray-600">{ability.effect_entries.find((entry: any) => entry.language.name === 'en').effect}</p>
                                                     )}
                                                 </li>
                                             );
@@ -152,7 +161,7 @@ export default function PokemonDetails({
                                                 <div className="w-full bg-gray-100 rounded-full h-2 mt-1">
                                                     <div
                                                         className="bg-black h-2 rounded-l-full"
-                                                        style={{width: `${(s.base_stat / 255) * 100}%`}}
+                                                        style={{ width: `${(s.base_stat / 255) * 100}%` }}
                                                     />
                                                 </div>
                                             </li>
@@ -163,7 +172,7 @@ export default function PokemonDetails({
 
                             {/* CHART TAB */}
                             <TabsContent value="chart" className="mt-4 p-4 sm:p-6">
-                                <StatsChart pokemon={pokemon} abilities={abilitiesForChart}/>
+                                <StatsChart pokemon={pokemon} abilities={abilitiesForChart} />
                             </TabsContent>
                         </Tabs>
                     </CardContent>

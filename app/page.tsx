@@ -2,7 +2,7 @@
 
 import { LoadingGrid } from '@/components/loading-grid';
 import { NoPokemonFound } from '@/components/no-pokemon-found';
-import { PokemonCard } from '@/components/pokemon-card';
+import { PokemonCard } from '@/components/pokemon/pokemon-card';
 import { SearchBar } from '@/components/search-bar';
 import { Button } from '@/components/ui/button';
 import { usePokemonList } from '@/hooks/use-pokemon-list';
