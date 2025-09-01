@@ -122,7 +122,7 @@ export default function PokemonDetails({
                                         {pokemon?.abilities?.map((a: any, idx: number) => {
                                             const ability = abilityDetails[a.ability.name];
                                             return (
-                                                <li key={idx} className="flex items-center gap-2 text-sm">
+                                                <li key={idx} className="text-sm">
                                                     {/* Main ability badge */}
                                                     <Badge
                                                         variant={a.is_hidden ? "destructive" : "default"}
@@ -140,7 +140,7 @@ export default function PokemonDetails({
 
                                                     {/* Ability description */}
                                                     {ability?.effect_entries?.find((entry: any) => entry.language.name === 'en')?.effect && (
-                                                        <p className="mt-1 text-gray-600">{ability.effect_entries.find((entry: any) => entry.language.name === 'en').effect}</p>
+                                                        <p className="mt-1 mb-4 text-gray-600">{ability.effect_entries.find((entry: any) => entry.language.name === 'en').effect}</p>
                                                     )}
                                                 </li>
                                             );
