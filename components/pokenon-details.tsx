@@ -9,9 +9,11 @@ import {
     formatWeight,
     getTypeColor,
 } from "@/lib/pokemon-utils";
-import {ArrowLeft} from "lucide-react";
+import {ArrowLeft, Info} from "lucide-react";
 import {Badge} from "@/components/ui/badge";
 import SubHeader from "@/components/ui/sub-header";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import StatsChart from "@/components/pokemon/StatsChart";
 
 interface PokemonDetailsProps {
     pokemon: any;
@@ -23,6 +25,11 @@ export default function PokemonDetails({
                                            species,
                                        }: PokemonDetailsProps) {
     if (!pokemon) return null;
+    const abilitiesForChart = pokemon?.abilities?.map((a: any) => ({
+        name: a?.ability?.name,
+        is_hidden: a?.is_hidden,
+        description: species?.abilities?.find((b: any) => b.name === a?.ability?.name)?.description,
+    }));
 
     return (
         <>
@@ -77,62 +84,82 @@ export default function PokemonDetails({
               </span>
                             ))}
                         </div>
+                        <Tabs defaultValue="details" className="mt-6">
+                            <TabsList className="grid grid-cols-2 w-full">
+                                <TabsTrigger value="details" className="gap-2">
+                                    <Info className="h-4 w-4 text-gray-600"/>                                    Details
+                                </TabsTrigger>
+                                <TabsTrigger value="chart" className="gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                                    Stats Chart
+                                </TabsTrigger>
+                            </TabsList>
 
-                        {/* Abilities */}
-                        <div>
-                            <h2 className="text-lg font-bold">Abilities</h2>
-                            <ul className="space-y-2 mt-2">
-                                {pokemon?.abilities?.map((a: any, idx: number) => {
-                                    const ability = species.abilities?.find(
-                                        (ab: any) => ab.name === a.ability.name
-                                    );
-                                    return (
-                                        <li key={idx} className="flex items-center gap-2 text-sm">
-                                            {/* Main ability badge */}
-                                            <Badge
-                                                variant={a.is_hidden ? "destructive" : "default"}
-                                                className="text-xs"
-                                            >
-                                                {a.ability.name}
-                                            </Badge>
+                            {/* DETAILS TAB (your current simple list UI) */}
+                            <TabsContent value="details" className="mt-4 p-4 sm:p-6">
+                                {/* keep your existing Abilities list + Base Stats progress bars here */}
+                                {/* Abilities */}
+                                <div>
+                                    <h2 className="text-lg font-bold">Abilities</h2>
+                                    <ul className="space-y-2 mt-2">
+                                        {pokemon?.abilities?.map((a: any, idx: number) => {
+                                            const ability = species.abilities?.find(
+                                                (ab: any) => ab.name === a.ability.name
+                                            );
+                                            return (
+                                                <li key={idx} className="flex items-center gap-2 text-sm">
+                                                    {/* Main ability badge */}
+                                                    <Badge
+                                                        variant={a.is_hidden ? "destructive" : "default"}
+                                                        className="text-xs"
+                                                    >
+                                                        {a.ability.name}
+                                                    </Badge>
 
-                                            {/* Hidden label badge */}
-                                            {a.is_hidden && (
-                                                <Badge variant="outline" className="text-xs">
-                                                    Hidden
-                                                </Badge>
-                                            )}
+                                                    {/* Hidden label badge */}
+                                                    {a.is_hidden && (
+                                                        <Badge variant="outline" className="text-xs">
+                                                            Hidden
+                                                        </Badge>
+                                                    )}
 
-                                            {/* Ability description */}
-                                            {ability?.description && (
-                                                <p className="mt-1 text-gray-600">{ability.description}</p>
-                                            )}
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                        </div>
+                                                    {/* Ability description */}
+                                                    {ability?.description && (
+                                                        <p className="mt-1 text-gray-600">{ability.description}</p>
+                                                    )}
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                </div>
 
-                        {/* Base Stats */}
-                        <div>
-                            <h2 className="text-lg font-bold mb-3">Base Stats</h2>
-                            <ul className="space-y-3">
-                                {pokemon.stats.map((s: any, idx: number) => (
-                                    <li key={idx}>
-                                        <div className="font-medium text-gray-700 flex justify-between">
-                                            <span className="capitalize">{s.stat.name}</span>
-                                            <span className="font-bold text-gray-800">{s.base_stat}</span>
-                                        </div>
-                                        <div className="w-full bg-gray-100 rounded-full h-2 mt-1">
-                                            <div
-                                                className="bg-black h-2 rounded-l-full"
-                                                style={{width: `${(s.base_stat / 255) * 100}%`}}
-                                            />
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                                {/* Base Stats */}
+                                <div>
+                                    <h2 className="text-lg font-bold mb-3">Base Stats</h2>
+                                    <ul className="space-y-3">
+                                        {pokemon.stats.map((s: any, idx: number) => (
+                                            <li key={idx}>
+                                                <div className="font-medium text-gray-700 flex justify-between">
+                                                    <span className="capitalize">{s.stat.name}</span>
+                                                    <span className="font-bold text-gray-800">{s.base_stat}</span>
+                                                </div>
+                                                <div className="w-full bg-gray-100 rounded-full h-2 mt-1">
+                                                    <div
+                                                        className="bg-black h-2 rounded-l-full"
+                                                        style={{width: `${(s.base_stat / 255) * 100}%`}}
+                                                    />
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </TabsContent>
+
+                            {/* CHART TAB */}
+                            <TabsContent value="chart" className="mt-4 p-4 sm:p-6">
+                                <StatsChart pokemon={pokemon} abilities={abilitiesForChart} />
+                            </TabsContent>
+                        </Tabs>
                     </CardContent>
                 </Card>
             </div>
